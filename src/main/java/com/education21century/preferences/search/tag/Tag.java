@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.Store;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -15,7 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "tags", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"value"})
+        @UniqueConstraint(columnNames = {"title"})
 })
 public class Tag {
 
@@ -28,6 +30,6 @@ public class Tag {
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
-    @Column(name = "value")
-    private String value;
+    @Field(store = Store.YES)
+    private String title;
 }
