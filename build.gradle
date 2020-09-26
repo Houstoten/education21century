@@ -19,6 +19,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     compile group: 'org.hibernate', name: 'hibernate-search-orm', version: '5.11.5.Final'
     compile group: 'org.hibernate', name: 'hibernate-search-elasticsearch', version: '5.11.5.Final'
+    compile group: 'org.elasticsearch.client', name: 'elasticsearch-rest-client', version: '6.8.12'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
