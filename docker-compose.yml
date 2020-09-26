@@ -1,0 +1,58 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    hostname: postgres
+    container_name: 'db'
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata_core:/var/lib/postgresql/data
+      - pgconf_core:/etc/postgresql
+      - pglog_core:/var/log/postgresql
+    env_file:
+      - ./.env/db.env
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  elasticsearch:
+    image: elasticsearch:5.6
+    container_name: 'elasticsearch'
+    env_file:
+      - ./.env/elastic.env
+    volumes:
+      - esdata:/data
+    ports:
+      - '9200:9200'
+
+  api:
+    image: 'ivanhusarov/preferences-search:latest'
+    container_name: 'core'
+    depends_on:
+      - db
+      - elasticsearch
+    ports:
+      - '5000:5000'
+    environment:
+      WAIT_HOSTS: db:5432
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+volumes:
+  pgdata_core:
+    driver: local
+  pgconf_core:
+    driver: local
+  pglog_core:
+    driver: local
+  shared:
+    driver: local
+  esdata:
+    driver: local
