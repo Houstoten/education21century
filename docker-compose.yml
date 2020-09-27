@@ -30,7 +30,7 @@ services:
       - '9200:9200'
 
   api:
-    image: 'ivanhusarov/preferences-search:latest'
+    image: 'ivanhusarov/preferences-api:latest'
     container_name: 'core'
     depends_on:
       - db
