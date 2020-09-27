@@ -2,6 +2,7 @@ package com.education21century.preferences.search.preference;
 
 import com.education21century.preferences.search.tag.Tag;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
@@ -14,7 +15,7 @@ import org.hibernate.search.annotations.Store;
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import java.math.BigDecimal;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,6 +25,7 @@ import java.util.UUID;
 @MappedSuperclass
 @SuperBuilder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Preference {
 
     @Id

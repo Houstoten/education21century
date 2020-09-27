@@ -7,10 +7,9 @@ import org.hibernate.search.jpa.Search;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Repository
 public class SearchRepository {
@@ -43,6 +42,19 @@ public class SearchRepository {
 
     @SuppressWarnings("unchecked")
     public Set<Preference> findPreferences(Map<Object, String[]> search) {
-        return (Set<Preference>) getFullTextQuery(Preference.class, search).getResultStream().collect(Collectors.toSet());
+        var projection = (Stream<Object[]>) getFullTextQuery(Preference.class, search)
+                .setProjection("id", "createdAt", "author", "title", "backgroundImage", "rating")
+                .getResultStream();
+        return projection.map(o -> Preference
+                .builder()
+                .id((UUID) o[0])
+                .createdAt((Date) o[1])
+                .author((String) o[2])
+                .title((String) o[3])
+                .backgroundImage((String) o[4])
+                .rating((Double) o[5])
+                .build()
+        )
+                .collect(Collectors.toSet());
     }
 }

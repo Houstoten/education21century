@@ -1,0 +1,10 @@
+POST http://localhost:5000/search/preferences
+Content-Type: application/json
+
+{
+    "author": "Jean",
+    "tags": [{"title": "science"}, {"title": "pop"}],
+    "rating": "3.0",
+    "createdAt": "2020-09-27 01:25:01"
+}
+###
