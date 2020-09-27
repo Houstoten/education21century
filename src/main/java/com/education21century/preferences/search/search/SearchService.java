@@ -26,7 +26,7 @@ public class SearchService {
         var qb = searchRepository.getQueryBuilder(Preference.class);
         var bj = searchRepository.getBooleanJunction(Preference.class);
 
-        if (dto.getRating() >= 0) {
+        if (dto.getRating() != null && dto.getRating() >= 0) {
             bj.should(qb.range()
                     .onField("rating")
                     .from(dto.getRating() - 0.5)

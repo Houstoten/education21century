@@ -4,7 +4,7 @@ Content-Type: application/json
 {
     "author": "Jean",
     "tags": [{"title": "science"}, {"title": "pop"}],
-    "rating": "0",
+    "rating": "3",
     "createdAt": "2020-09-27"
 }
 ###
