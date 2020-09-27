@@ -78,4 +78,7 @@ public class Preference {
     @Min(0)
     @Field(store = Store.YES)
     private double rating;
+
+    @Field(store = Store.YES)
+    private Class<? extends Preference> className;
 }

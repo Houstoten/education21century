@@ -69,6 +69,7 @@ public class DatabaseSeeder {
                                 .author("Adam")
                                 .tags(new HashSet<>(tags.subList(0, new Random().nextInt(tags.size()))))
                                 .rating(4.6f)
+                                .className(Test.class)
                                 .build()
                         , Test.builder()
                                 .title("Observe")
@@ -76,6 +77,7 @@ public class DatabaseSeeder {
                                 .author("Adam")
                                 .tags(new HashSet<>(tags.subList(0, new Random().nextInt(tags.size()))))
                                 .rating(3.2f)
+                                .className(Test.class)
                                 .build()
                         , Test.builder()
                                 .title("Gay")
@@ -83,6 +85,7 @@ public class DatabaseSeeder {
                                 .author("Glen")
                                 .tags(new HashSet<>(tags.subList(0, new Random().nextInt(tags.size()))))
                                 .rating(2.45f)
+                                .className(Test.class)
                                 .build()
                 )
         );
@@ -103,6 +106,7 @@ public class DatabaseSeeder {
                                 .author("Sofie")
                                 .tags(new HashSet<>(tags.subList(0, new Random().nextInt(tags.size()))))
                                 .rating(4.6f)
+                                .className(News.class)
                                 .build()
                         , News.builder()
                                 .body("He do subjects prepared bachelor juvenile ye oh. He feelings removing" +
@@ -115,6 +119,7 @@ public class DatabaseSeeder {
                                 .author("Adam")
                                 .tags(new HashSet<>(tags.subList(0, new Random().nextInt(tags.size()))))
                                 .rating(3.2f)
+                                .className(News.class)
                                 .build()
                         , News.builder()
                                 .body("The him father parish looked has sooner. Attachment frequently gay" +
@@ -127,6 +132,7 @@ public class DatabaseSeeder {
                                 .author("Glen")
                                 .tags(new HashSet<>(tags.subList(0, new Random().nextInt(tags.size()))))
                                 .rating(2.45f)
+                                .className(News.class)
                                 .build()
                 )
         );
@@ -147,6 +153,7 @@ public class DatabaseSeeder {
                                 .author("Jean")
                                 .tags(new HashSet<>(tags.subList(0, new Random().nextInt(tags.size()))))
                                 .rating(4.5f)
+                                .className(Article.class)
                                 .build()
                         , Article.builder()
                                 .body("For who thoroughly her boy estimating conviction. Removed demands" +
@@ -160,6 +167,7 @@ public class DatabaseSeeder {
                                 .author("Big Boy")
                                 .tags(new HashSet<>(tags.subList(0, new Random().nextInt(tags.size()))))
                                 .rating(3.0f)
+                                .className(Article.class)
                                 .build()
                         , Article.builder()
                                 .body("In by an appetite no humoured returned informed. Possession so comparison" +
@@ -172,6 +180,7 @@ public class DatabaseSeeder {
                                 .author("Clara")
                                 .tags(new HashSet<>(tags.subList(0, new Random().nextInt(tags.size()))))
                                 .rating(2.2f)
+                                .className(Article.class)
                                 .build()
                 )
         );

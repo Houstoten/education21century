@@ -2,6 +2,7 @@ package com.education21century.preferences.search.search;
 
 import com.education21century.preferences.search.preference.Preference;
 import com.education21century.preferences.search.preference.dto.PreferenceRequestDto;
+import com.education21century.preferences.search.preference.dto.PreferenceResultDto;
 import com.education21century.preferences.search.tag.Tag;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ public class SearchService {
         this.searchRepository = searchRepository;
     }
 
-    public Set<Preference> findPreferences(PreferenceRequestDto dto) {
+    public Set<PreferenceResultDto> findPreferences(PreferenceRequestDto dto) {
         var qb = searchRepository.getQueryBuilder(Preference.class);
         var bj = searchRepository.getBooleanJunction(Preference.class);
 
@@ -62,10 +63,10 @@ public class SearchService {
         }
 
         Stream<Object[]> ftq = searchRepository.getFullTextFromBoolean(bj, Preference.class)
-                .setProjection("id", "createdAt", "author", "title", "backgroundImage", "rating")
+                .setProjection("id", "createdAt", "author", "title", "backgroundImage", "rating", "className")
                 .getResultStream();
 
-        return ftq.map(o -> Preference
+        return ftq.map(o -> PreferenceResultDto
                 .builder()
                 .id((UUID) o[0])
                 .createdAt((LocalDate) o[1])
@@ -73,6 +74,7 @@ public class SearchService {
                 .title((String) o[3])
                 .backgroundImage((String) o[4])
                 .rating((Double) o[5])
+                .className(o[6].toString())
                 .build()
         )
                 .collect(Collectors.toSet());

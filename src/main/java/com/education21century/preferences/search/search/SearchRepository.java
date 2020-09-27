@@ -62,7 +62,7 @@ public class SearchRepository {
     @SuppressWarnings("unchecked")
     public Set<Preference> findPreferences(Map<Object, String[]> search) {
         var projection = (Stream<Object[]>) getFullTextQuery(Preference.class, search)
-                .setProjection("id", "createdAt", "author", "title", "backgroundImage", "rating")
+                .setProjection("id", "createdAt", "author", "title", "backgroundImage", "rating", "className")
                 .getResultStream();
         return projection.map(o -> Preference
                 .builder()
@@ -72,6 +72,7 @@ public class SearchRepository {
                 .title((String) o[3])
                 .backgroundImage((String) o[4])
                 .rating((Double) o[5])
+                .className((Class<Preference>) o[6])
                 .build()
         )
                 .collect(Collectors.toSet());
