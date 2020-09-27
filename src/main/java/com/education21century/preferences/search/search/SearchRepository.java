@@ -4,9 +4,12 @@ import com.education21century.preferences.search.preference.Preference;
 import org.apache.lucene.search.Query;
 import org.hibernate.search.jpa.FullTextQuery;
 import org.hibernate.search.jpa.Search;
+import org.hibernate.search.query.dsl.BooleanJunction;
+import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -21,22 +24,38 @@ public class SearchRepository {
     }
 
     private FullTextQuery getFullTextQuery(Class<?> initial, Map<Object, String[]> map) {
+
+        var qb = getQueryBuilder(initial);
+        var bj = getBooleanJunction(initial);
+
+        map.forEach((k, v) -> bj.should(qb.keyword().onFields(v).matching(k).createQuery()));
+
+        return getFullTextFromBoolean(bj, initial);
+    }
+
+    public QueryBuilder getQueryBuilder(Class<?> initial) {
         var fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
 
-        var qb = fullTextEntityManager
+        return fullTextEntityManager
                 .getSearchFactory()
                 .buildQueryBuilder()
                 .forEntity(initial)
                 .get();
-        var bj = fullTextEntityManager
+    }
+
+    public BooleanJunction getBooleanJunction(Class<?> initial) {
+        var fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
+
+        return fullTextEntityManager
                 .getSearchFactory()
                 .buildQueryBuilder()
                 .forEntity(initial)
                 .get()
                 .bool();
+    }
 
-        map.forEach((k, v) -> bj.should(qb.keyword().onFields(v).matching(k).createQuery()));
-
+    public FullTextQuery getFullTextFromBoolean(BooleanJunction bj, Class<?> initial) {
+        var fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
         return fullTextEntityManager.createFullTextQuery(bj.createQuery(), initial);
     }
 
@@ -48,7 +67,7 @@ public class SearchRepository {
         return projection.map(o -> Preference
                 .builder()
                 .id((UUID) o[0])
-                .createdAt((Date) o[1])
+                .createdAt((LocalDate) o[1])
                 .author((String) o[2])
                 .title((String) o[3])
                 .backgroundImage((String) o[4])

@@ -5,9 +5,13 @@ import com.education21century.preferences.search.preference.dto.PreferenceReques
 import com.education21century.preferences.search.tag.Tag;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class SearchService {
@@ -18,19 +22,59 @@ public class SearchService {
         this.searchRepository = searchRepository;
     }
 
-    public Set<Preference> findPreferences(PreferenceRequestDto dto){
-        return searchRepository.findPreferences(Map.of(
-                dto.getAuthor()
-                , new String[]{"author"},
+    public Set<Preference> findPreferences(PreferenceRequestDto dto) {
+        var qb = searchRepository.getQueryBuilder(Preference.class);
+        var bj = searchRepository.getBooleanJunction(Preference.class);
 
-                dto.getTags().stream().map(Tag::getTitle).collect(Collectors.joining(" "))
-                , new String[]{"tags.title"},
+        if (dto.getRating() >= 0) {
+            bj.should(qb.range()
+                    .onField("rating")
+                    .from(dto.getRating() - 0.5)
+                    .to(dto.getRating() + 0.5)
+                    .createQuery());
+        }
 
-                dto.getRating()
-                , new String[]{"rating"},
+        if (dto.getCreatedAt() != null) {
+            bj.should(qb.range()
+                    .onField("createdAt")
+                    .from(dto.getCreatedAt().minusMonths(1))
+                    .to(dto.getCreatedAt().plusMonths(1))
+                    .createQuery());
+        }
 
-                dto.getCreatedAt()
-                , new String[]{"createdAt"}
-        ));
+        if (dto.getTitle() != null) {
+            bj.should(qb.keyword().onFields("title").matching(dto.getTitle()).createQuery());
+        }
+
+        if (dto.getAuthor() != null) {
+            bj.should(qb.keyword().onFields("author").matching(dto.getAuthor()).createQuery());
+        }
+
+        if (dto.getTags() != null && !dto.getTags().isEmpty()) {
+            bj.should(qb.keyword().onFields("tags.title")
+                    .matching(dto
+                            .getTags()
+                            .stream()
+                            .map(Tag::getTitle)
+                            .collect(Collectors.joining(" "))
+                    )
+                    .createQuery());
+        }
+
+        Stream<Object[]> ftq = searchRepository.getFullTextFromBoolean(bj, Preference.class)
+                .setProjection("id", "createdAt", "author", "title", "backgroundImage", "rating")
+                .getResultStream();
+
+        return ftq.map(o -> Preference
+                .builder()
+                .id((UUID) o[0])
+                .createdAt((LocalDate) o[1])
+                .author((String) o[2])
+                .title((String) o[3])
+                .backgroundImage((String) o[4])
+                .rating((Double) o[5])
+                .build()
+        )
+                .collect(Collectors.toSet());
     }
 }
