@@ -39,7 +39,7 @@ services:
     ports:
       - '5000:5000'
     environment:
-      WAIT_HOSTS: db:5432
+      WAIT_HOSTS: db:5432, elasticsearch:9200
     logging:
       driver: "json-file"
       options:
