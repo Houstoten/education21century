@@ -11,7 +11,7 @@ services:
       - pgdata_core:/var/lib/postgresql/data
       - pgconf_core:/etc/postgresql
       - pglog_core:/var/log/postgresql
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./init.sql:/docker-entrypoint-initdb.d
     env_file:
       - ./.env/db.env
     logging:
